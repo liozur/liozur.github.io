@@ -1,0 +1,59 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+
+let {
+    content: { title, added, updated, tags, description },
+} = Astro.props;
+
+added = new Date(added).toISOString().slice(0, 10);
+if (updated) {
+    updated = new Date(updated).toISOString().slice(0, 10);
+}
+---
+
+<html lang="zh-cn">
+    <BaseHead title={title} />
+
+    <body>
+        <main>
+            <h1>{title}</h1>
+
+            <div
+                class="vice"
+                style="text-align: center; font-size: 1.3em; width: 90%; margin: -0.6em auto 0.2em auto"
+            >
+                {description}
+            </div>
+
+            <div class="vice" style="text-align: center">
+                {
+                    updated && updated !== added ? (
+                        <span>
+                            <time>{added}</time> (<time>{updated}</time>)
+                        </span>
+                    ) : (
+                        <span>{added && <time>{added}</time>}</span>
+                    )
+                }
+            </div>
+
+            <div class="vice" style="text-align: center; margin: 0 auto 0 auto">
+                {
+                    tags.map((tag: string, i: number) => (
+                        <span>
+                            {i > 0 && " / "}
+                            {tag}
+                        </span>
+                    ))
+                }
+            </div>
+
+            <hr />
+
+            <slot />
+
+            <Footer />
+        </main>
+    </body>
+</html>

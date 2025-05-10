@@ -1,0 +1,1017 @@
+File: ./astro.config.ts
+
+```
+import sitemap from "@astrojs/sitemap";
+import { defineConfig } from "astro/config";
+
+import markdownReplace from "./plugins/markdown-replace";
+import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
+
+export default defineConfig({
+    site: "https://liozur.github.io/",
+    base: "/",
+    integrations: [sitemap()],
+    markdown: {
+        shikiConfig: {
+            theme: "github-light-default",
+            langs: [],
+        },
+
+        remarkPlugins: [
+            markdownReplace,
+            remarkSqueezeParagraphs,
+        ],
+
+        rehypePlugins: [
+        ]
+    },
+});
+
+```
+
+File: ./README.md
+
+```
+# Liozur 的博客
+
+Hello, world!
+
+```
+
+File: ./.astro/content.d.ts
+
+```
+declare module 'astro:content' {
+	export interface RenderResult {
+		Content: import('astro/runtime/server/index.js').AstroComponentFactory;
+		headings: import('astro').MarkdownHeading[];
+		remarkPluginFrontmatter: Record<string, any>;
+	}
+	interface Render {
+		'.md': Promise<RenderResult>;
+	}
+
+	export interface RenderedContent {
+		html: string;
+		metadata?: {
+			imagePaths: Array<string>;
+			[key: string]: unknown;
+		};
+	}
+}
+
+declare module 'astro:content' {
+	type Flatten<T> = T extends { [K: string]: infer U } ? U : never;
+
+	export type CollectionKey = keyof AnyEntryMap;
+	export type CollectionEntry<C extends CollectionKey> = Flatten<AnyEntryMap[C]>;
+
+	export type ContentCollectionKey = keyof ContentEntryMap;
+	export type DataCollectionKey = keyof DataEntryMap;
+
+	type AllValuesOf<T> = T extends any ? T[keyof T] : never;
+	type ValidContentEntrySlug<C extends keyof ContentEntryMap> = AllValuesOf<
+		ContentEntryMap[C]
+	>['slug'];
+
+	export type ReferenceDataEntry<
+		C extends CollectionKey,
+		E extends keyof DataEntryMap[C] = string,
+	> = {
+		collection: C;
+		id: E;
+	};
+	export type ReferenceContentEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}) = string,
+	> = {
+		collection: C;
+		slug: E;
+	};
+
+	/** @deprecated Use `getEntry` instead. */
+	export function getEntryBySlug<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		collection: C,
+		// Note that this has to accept a regular string too, for SSR
+		entrySlug: E,
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+
+	/** @deprecated Use `getEntry` instead. */
+	export function getDataEntryById<C extends keyof DataEntryMap, E extends keyof DataEntryMap[C]>(
+		collection: C,
+		entryId: E,
+	): Promise<CollectionEntry<C>>;
+
+	export function getCollection<C extends keyof AnyEntryMap, E extends CollectionEntry<C>>(
+		collection: C,
+		filter?: (entry: CollectionEntry<C>) => entry is E,
+	): Promise<E[]>;
+	export function getCollection<C extends keyof AnyEntryMap>(
+		collection: C,
+		filter?: (entry: CollectionEntry<C>) => unknown,
+	): Promise<CollectionEntry<C>[]>;
+
+	export function getEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		entry: ReferenceContentEntry<C, E>,
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof DataEntryMap,
+		E extends keyof DataEntryMap[C] | (string & {}),
+	>(
+		entry: ReferenceDataEntry<C, E>,
+	): E extends keyof DataEntryMap[C]
+		? Promise<DataEntryMap[C][E]>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof ContentEntryMap,
+		E extends ValidContentEntrySlug<C> | (string & {}),
+	>(
+		collection: C,
+		slug: E,
+	): E extends ValidContentEntrySlug<C>
+		? Promise<CollectionEntry<C>>
+		: Promise<CollectionEntry<C> | undefined>;
+	export function getEntry<
+		C extends keyof DataEntryMap,
+		E extends keyof DataEntryMap[C] | (string & {}),
+	>(
+		collection: C,
+		id: E,
+	): E extends keyof DataEntryMap[C]
+		? string extends keyof DataEntryMap[C]
+			? Promise<DataEntryMap[C][E]> | undefined
+			: Promise<DataEntryMap[C][E]>
+		: Promise<CollectionEntry<C> | undefined>;
+
+	/** Resolve an array of entry references from the same collection */
+	export function getEntries<C extends keyof ContentEntryMap>(
+		entries: ReferenceContentEntry<C, ValidContentEntrySlug<C>>[],
+	): Promise<CollectionEntry<C>[]>;
+	export function getEntries<C extends keyof DataEntryMap>(
+		entries: ReferenceDataEntry<C, keyof DataEntryMap[C]>[],
+	): Promise<CollectionEntry<C>[]>;
+
+	export function render<C extends keyof AnyEntryMap>(
+		entry: AnyEntryMap[C][string],
+	): Promise<RenderResult>;
+
+	export function reference<C extends keyof AnyEntryMap>(
+		collection: C,
+	): import('astro/zod').ZodEffects<
+		import('astro/zod').ZodString,
+		C extends keyof ContentEntryMap
+			? ReferenceContentEntry<C, ValidContentEntrySlug<C>>
+			: ReferenceDataEntry<C, keyof DataEntryMap[C]>
+	>;
+	// Allow generic `string` to avoid excessive type errors in the config
+	// if `dev` is not running to update as you edit.
+	// Invalid collection names will be caught at build time.
+	export function reference<C extends string>(
+		collection: C,
+	): import('astro/zod').ZodEffects<import('astro/zod').ZodString, never>;
+
+	type ReturnTypeOrOriginal<T> = T extends (...args: any[]) => infer R ? R : T;
+	type InferEntrySchema<C extends keyof AnyEntryMap> = import('astro/zod').infer<
+		ReturnTypeOrOriginal<Required<ContentConfig['collections'][C]>['schema']>
+	>;
+
+	type ContentEntryMap = {
+		
+	};
+
+	type DataEntryMap = {
+		
+	};
+
+	type AnyEntryMap = ContentEntryMap & DataEntryMap;
+
+	export type ContentConfig = typeof import("../src/content.config.mjs");
+}
+
+```
+
+File: ./.astro/content-modules.mjs
+
+```
+export default new Map();
+```
+
+File: ./.astro/types.d.ts
+
+```
+/// <reference types="astro/client" />
+
+```
+
+File: ./.astro/content-assets.mjs
+
+```
+export default new Map();
+```
+
+File: ./plugins/markdown-replace.js
+
+```
+import { visit } from 'unist-util-visit';
+
+function numberToChinese(num) {
+    // 参数验证
+    if (!Number.isInteger(num) || num < 1 || num > 99) {
+        throw new Error(`请输入 1-99 之间的整数: ${num}`);
+    }
+
+    // 基本数字映射
+    const digits = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+
+    // 个位数直接返回
+    if (num < 10) {
+        return digits[num];
+    }
+
+    // 处理两位数
+    const tens = Math.floor(num / 10);
+    const ones = num % 10;
+
+    let result = '';
+
+    // 处理十位
+    if (tens === 1) {
+        result = '十';
+    } else {
+        result = digits[tens] + '十';
+    }
+
+    // 处理个位
+    if (ones !== 0) {
+        result += digits[ones];
+    }
+
+    return result;
+}
+
+function regex(node, regex, template) {
+    const newChildren = [];
+
+    for (const child of node.children) {
+        /* 这里需要对 html 进行操作, 否则会造成漏匹配 */
+        if (child.type !== 'text' && child.type !== 'html' && child.type !== 'blockquote') {
+            newChildren.push(child);
+            continue;
+        }
+
+        if (child.value.replace(regex, template) === child.value) {
+            if (child.type === "html") {
+                newChildren.push(child)
+            } else {
+                newChildren.push({
+                    type: "text",
+                    value: child.value
+                })
+            }
+        } else {
+            newChildren.push({
+                type: "html",
+                value: child.value.replace(regex, template)
+            })
+        }
+    }
+
+    return newChildren;
+}
+
+function imgRegex(node) {
+    const newChildren = [];
+
+    if (typeof imgRegex.imgNum === 'undefined') {
+        imgRegex.imgNum = 0;
+    }
+
+    for (const child of node.children) {
+        if (child.type !== 'image') {
+            newChildren.push(child);
+            continue;
+        }
+
+        newChildren.push(child)
+
+        imgRegex.imgNum = imgRegex.imgNum + 1;
+        newChildren.push({
+            type: "html",
+            value: `<p class="img_title"><a href="#img_forward_link_图${numberToChinese(imgRegex.imgNum)}" id="img_backward_link_图${numberToChinese(imgRegex.imgNum)}">图${numberToChinese(imgRegex.imgNum)}</a>：${child.alt}</p>`
+        })
+    }
+
+    return newChildren;
+}
+
+function tblRegex(node) {
+    const newChildren = [];
+    let isInTbl = false;
+    let isFirstRow = true;
+    let currentTblTitle = "";
+
+    if (typeof tblRegex.tblNum === 'undefined') {
+        tblRegex.tblNum = 0;
+    }
+
+    for (const child of node.children) {
+        if (child.type !== 'tableRow') {
+            if (isInTbl === true) {
+                tblRegex.tblNum = tblRegex.tblNum + 1;
+                newChildren.push({
+                    type: "html",
+                    value: `<p class="tbl_title"><a href="#tbl_forward_link_表${numberToChinese(tblRegex.tblNum)}" id="tbl_backward_link_表${numberToChinese(tblRegex.tblNum)}">表${numberToChinese(tblRegex.tblNum)}</a>：${currentTblTitle}</p>`
+                });
+                isInTbl = false;
+            }
+            newChildren.push(child);
+            continue;
+        }
+
+        isInTbl = true;
+
+        if (isFirstRow && child.children && child.children[0]) {
+            const firstCell = child.children[0];
+            if (firstCell.children && firstCell.children[0]) {
+                currentTblTitle = firstCell.children[0].value || "";
+                firstCell.children[0].value = "";
+            }
+            isFirstRow = false;
+        }
+
+        newChildren.push(child);
+    }
+
+    if (isInTbl === true) {
+        tblRegex.tblNum = tblRegex.tblNum + 1;
+        newChildren.push({
+            type: "html",
+            value: `<p class="tbl_title"><a href="#tbl_forward_link_表${numberToChinese(tblRegex.tblNum)}" id="tbl_backward_link_表${numberToChinese(tblRegex.tblNum)}">表${numberToChinese(tblRegex.tblNum)}</a>：${currentTblTitle}</p>`
+        });
+    }
+
+    return newChildren;
+}
+
+// 添加内联脚注处理
+function footnoteRegex(node) {
+    if (typeof footnoteRegex.footNoteNum === 'undefined') {
+        footnoteRegex.footNoteNum = 0;
+    }
+
+    const newChildren = [];
+
+    for (const child of node.children) {
+        if (child.type !== 'text' && child.type !== 'html') {
+            newChildren.push(child);
+            continue;
+        }
+
+        // 匹配 [^内容] 格式的内联脚注
+        const inlineFootnotePattern = /\[\^(?!表|图)([^\]]*?)\]/g;
+
+        if (!inlineFootnotePattern.test(child.value)) {
+            newChildren.push(child);
+            continue;
+        }
+
+        let result = child.value;
+        let match;
+        const regex = new RegExp(/\[\^(?!表|图)([^\]]*?)\]/g);
+
+        while ((match = regex.exec(child.value)) !== null) {
+            footnoteRegex.footNoteNum++;
+            const footnoteNum = footnoteRegex.footNoteNum;
+            const footnoteContent = match[1];
+
+            // 替换内联脚注标记为引用标记
+            const reference = `<a class="comment_forward_link" href="#comment_backward_link_${footnoteNum}" id="comment_forward_link_${footnoteNum}">[${footnoteNum}]</a>`;
+            result = result.replace(match[0], reference);
+
+            // 创建脚注内容
+            newChildren.push({
+                type: "html",
+                value: `<table class="comment"><tr class="comment"><td class="comment"><a href="#comment_forward_link_${footnoteNum}" id="comment_backward_link_${footnoteNum}">[${footnoteNum}]</a></td><td class="comment">${footnoteContent}</td></tr></table>`
+            });
+        }
+
+        // 添加替换后的文本
+        if (child.type === "html") {
+            newChildren.push({
+                type: "html",
+                value: result
+            });
+        } else {
+            newChildren.push({
+                type: "html",
+                value: result
+            });
+        }
+    }
+
+    return newChildren;
+}
+
+export default function markdownReplace() {
+    imgRegex.imgNum = 0;
+    tblRegex.tblNum = 0;
+    footnoteRegex.footNoteNum = 0;
+
+    return (tree) => {
+        visit(tree, ['paragraph', 'table', 'tableCell'], (node) => {
+            if (!node.children) return;
+
+            node.children = footnoteRegex(node);
+
+            node.children = imgRegex(node);
+            node.children = regex(node, /\[\^(图.*?)\]/g, '<a href="#img_backward_link_$1" id="img_forward_link_$1">$1</a>');
+
+            node.children = tblRegex(node);
+            node.children = regex(node, /\[\^(表.*?)\]/g, '<a href="#tbl_backward_link_$1" id="tbl_forward_link_$1">$1</a>');
+
+            /*TODO: 如果有多个对同一图表的引用, 可能会导致反向链接失效 */
+
+            node.children = regex(node, /(——.*)/g, '<p style="text-align: right">$1</p>');
+        });
+    };
+}
+
+```
+
+File: ./src/config.js
+
+```
+export const SITE_TITLE = "Liozur";
+
+```
+
+File: ./src/posts/2025-05-10.md
+
+```
+---
+title: 这是一个标题
+added: 2024-05-10
+description: 文章简短描述
+tags:
+  - tag1
+  - tag2
+---
+
+这是一段正文。
+
+这是另外一段正文。
+
+```
+
+File: ./src/posts/test.md
+
+```
+---
+title: 现代软件开发方法论比较
+added: 2025-05-11
+description: 对敏捷、精益和DevOps等软件开发方法论的深入分析与比较
+tags:
+  - 软件开发
+  - 方法论
+  - 敏捷
+  - DevOps
+---
+
+## 引言
+
+软件开发方法论在过去几十年经历了显著的演变。从瀑布模型到敏捷开发，再到DevOps和精益开发，每种方法论都有其独特的理念和实践。本文将深入探讨几种主流开发方法论，分析它们的核心原则、优势劣势以及适用场景。
+
+### 研究背景
+
+随着软件在现代社会中的重要性不断提升，高效的软件开发过程变得尤为关键。选择合适的开发方法论可以显著提高团队效率和产品质量[^软件开发方法论的选择对项目成功率有高达45%的影响，根据Gartner 2024年研究报告]。
+
+## 主要开发方法论
+
+### 瀑布模型
+
+瀑布模型是最早被正式定义的软件开发过程，由Winston W. Royce在1970年提出。
+
+#### 特点与流程
+
+瀑布模型将软件开发过程划分为明确的阶段，这些阶段按顺序执行，如下表所示：
+
+| 阶段名称 | 主要活动             | 交付物         |
+| -------- | -------------------- | -------------- |
+| 需求分析 | 收集用户需求并文档化 | 需求规格说明书 |
+| 系统设计 | 根据需求设计系统架构 | 系统设计文档   |
+| 编码实现 | 根据设计文档编写代码 | 源代码         |
+| 集成测试 | 测试各模块间的集成   | 测试报告       |
+| 部署维护 | 部署系统并提供维护   | 系统产品       |
+
+如[^表一]所示，瀑布模型的每个阶段都有明确的输入和输出。这种结构化的方法适合于需求稳定的项目。
+
+#### 优缺点分析
+
+**优点：**
+
+- 结构清晰，便于管理
+- 文档齐全，便于审计
+- 适合于需求明确的项目
+
+**缺点：**
+
+- 灵活性低，难以应对需求变化
+- 客户反馈周期长
+- 风险集中在后期
+
+### 敏捷开发
+
+#### 敏捷宣言与原则
+
+敏捷开发始于2001年发布的《敏捷宣言》，强调：
+
+1. 个体和互动高于流程和工具
+2. 工作的软件高于详尽的文档
+3. 客户合作高于合同谈判
+4. 响应变化高于遵循计划
+
+#### Scrum框架
+
+Scrum是最流行的敏捷框架之一，其核心元素包括：
+
+![Scrum框架图](attachments/test.png)
+
+图[^图一]展示了Scrum的主要组件和工作流程。Sprint作为Scrum的核心时间单位，通常持续2-4周。
+
+#### 看板方法
+
+看板方法源自丰田生产系统，强调可视化工作流程和限制在制品数量。
+
+![看板示例](attachments/test.png)
+
+如[^图二]所示，看板通过直观的可视化方式展示工作状态，帮助团队识别瓶颈和提高流程效率。
+
+## DevOps实践
+
+### DevOps核心理念
+
+DevOps旨在打破开发(Dev)和运维(Ops)之间的壁垒，促进协作和自动化。其主要目标包括：
+
+- 缩短开发周期
+- 提高部署频率
+- 降低变更失败率
+- 缩短恢复时间
+
+### CI/CD流水线
+
+持续集成/持续部署(CI/CD)是DevOps的核心实践。典型的CI/CD流水线包括：
+
+```
+代码提交 → 自动构建 → 自动测试 → 自动部署
+```
+
+#### 工具生态系统
+
+| 工具类别 | 代表工具            | 主要功能           |
+| -------- | ------------------- | ------------------ |
+| 代码管理 | Git, GitHub         | 版本控制，代码协作 |
+| 构建工具 | Jenkins, GitLab CI  | 自动化构建，集成   |
+| 容器化   | Docker, Kubernetes  | 应用封装，编排     |
+| 监控工具 | Prometheus, Grafana | 性能监控，可视化   |
+
+[^表二]列出了DevOps常用工具，这些工具共同构成了现代DevOps实践的基础设施。
+
+### 实际案例分析
+
+Netflix的DevOps转型是业界经典案例。他们通过实施微服务架构和自动化部署，实现了每天数千次的代码部署[^Netflix通过DevOps实践，将月度发布转变为每日数千次部署，同时将服务可用性提高到99.99%。
+
+#### 实施挑战
+
+DevOps转型面临的主要挑战包括：
+
+1. 文化转变
+2. 技能差距
+3. 工具选择和集成
+4. 安全合规考量
+
+## 精益软件开发
+
+### 源自丰田生产系统
+
+精益软件开发源自丰田生产系统(TPS)的精益制造理念，核心是消除浪费，创造价值。
+
+### 七大原则
+
+精益软件开发的七大原则如下：
+
+![精益开发原则](attachments/test.png)
+
+如[^图三]所示，消除浪费和交付价值是精益开发的核心理念。
+
+### 与敏捷的关系
+
+精益与敏捷有很多共同点，但精益更关注价值流和系统性思考，而敏捷更关注团队协作和快速交付。
+
+## 方法论选择指南
+
+### 项目特性评估
+
+选择适合的开发方法论应考虑以下因素：
+
+| 项目特性           | 建议方法论  |
+| ------------------ | ----------- |
+| 需求明确，变化少   | 瀑布模型    |
+| 需求变化频繁       | 敏捷(Scrum) |
+| 持续交付重要       | DevOps      |
+| 资源有限，效率优先 | 精益        |
+
+[^表三]提供了基于项目特性选择方法论的简要指南。
+
+### 混合方法论
+
+实际项目中，混合使用多种方法论的情况越来越常见。例如，"ScrumBan"结合了Scrum的迭代计划和看板的可视化工作流。
+
+#### 案例分析
+
+Spotify模型是混合方法论的典型代表，结合了敏捷实践和矩阵组织结构，形成了独特的"部落-小队-分会"组织形式。
+
+![Spotify模型](attachments/test.png)
+
+[^图四]展示了Spotify模型的组织结构，这种模型平衡了自主性和一致性。
+
+## 未来趋势
+
+### AI辅助开发
+
+人工智能正在改变软件开发实践，从代码补全到智能测试，AI工具正成为开发团队的重要助手[^据2025年预测，超过60%的开发团队将在日常工作中使用某种形式的AI辅助工具。
+
+### 低代码/无代码平台
+
+低代码/无代码平台使开发更加民主化，允许非技术人员参与应用构建过程。
+
+### 分布式团队协作
+
+远程工作的普及推动了分布式团队协作工具和实践的发展，这也对传统开发方法论提出了新挑战。
+
+## 结论
+
+> 未来的软件开发将更加注重灵活性、自动化和协作，同时融合多种方法论的优势，以应对日益复杂的技术环境和市场需求。
+> ——某人
+
+没有一种方法论适用于所有情况。成功的软件开发依赖于根据项目特性和团队能力选择合适的方法论，并在实践中不断调整优化。
+
+```
+
+File: ./src/components/Footer.astro
+
+```
+---
+const today = new Date();
+---
+
+<footer>
+    &copy; {today.getFullYear()} Liozur
+
+    <br />
+
+    所有内容采用 <a
+        href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh"
+    >
+        CC BY-NC 4.0</a
+    > 许可协议
+
+    <br />
+
+    <a href="https://liozur.github.io" style="margin-right: 0.5em">Home</a>
+    <a href="mailto:liozur.owa@icloud.com" style="margin-right: 0.5em">Email</a>
+    <a href="https://github.com/liozur" style="margin-right: 0.5em"
+        >GitHub</a
+    >
+    <a href="RSS">RSS</a>
+</footer>
+
+<style>
+    footer {
+        font-size: 0.8em; /* TODO: 引入太多的字体大小好吗? */
+        font-family: ZhSerif, IBMPlexSerif;
+        text-align: center;
+        line-height: calc(var(--font-size) * 1);
+
+        padding: 2em 0 2em 0;
+    }
+</style>
+
+```
+
+File: ./src/components/Post.astro
+
+```
+---
+const { added, description, tags, title } = Astro.props;
+---
+
+<br />
+
+<a class="toc" href={`/post/${title}/`}>{title} </a>
+
+<time class="vice" datetime={added}>
+    <!-- {new Date(date).toISOString().slice(0, 10)} -->
+    {added}
+</time>
+
+<div>{description}</div>
+
+<div class="vice">
+    {
+        tags.map((tag: string, i: number) => (
+            <span>
+                {i > 0 && " / "}
+                {tag}
+            </span>
+        ))
+    }
+</div>
+
+<style>
+    a.toc {
+        font-size: 1.3em;
+        font-family: ZhSerif, IBMPlexSerif;
+    }
+</style>
+
+```
+
+File: ./src/components/Header.astro
+
+```
+---
+import { SITE_TITLE } from "../config";
+---
+
+<header>
+    <h1 class="header">{SITE_TITLE}</h1>
+
+    <hr />
+</header>
+
+<style>
+    header {
+        font-style: italic;
+    }
+</style>
+
+```
+
+File: ./src/components/HomePosts.astro
+
+```
+---
+import Post from "../components/Post.astro";
+
+const { allPosts } = Astro.props;
+
+let posts = allPosts.sort(
+    (a, b) =>
+        new Date(b.frontmatter.added).valueOf() -
+        new Date(a.frontmatter.added).valueOf(),
+);
+---
+
+<ul style={{ paddingLeft: "0" }}>
+    {
+        posts.map(
+            ({
+                url,
+                frontmatter: { added: date, description, tags, title },
+            }) => <Post {date} {description} {tags} {title} />,
+        )
+    }
+</ul>
+
+```
+
+File: ./src/components/BaseHead.astro
+
+```
+---
+import "../style/stylesheet.css";
+
+const { title } = Astro.props;
+---
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="generator" content={Astro.generator} />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <title>{title}</title>
+
+    <meta name="title" content={title} />
+</head>
+
+```
+
+File: ./src/layouts/BlogPost.astro
+
+```
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+
+let {
+    content: { title, added, updated, tags, description },
+} = Astro.props;
+
+added = new Date(added).toISOString().slice(0, 10);
+if (updated) {
+    updated = new Date(updated).toISOString().slice(0, 10);
+}
+---
+
+<html lang="zh-cn">
+    <BaseHead title={title} />
+
+    <body>
+        <main>
+            <h1>{title}</h1>
+
+            <div
+                class="vice"
+                style="text-align: center; font-size: 1.3em; width: 90%; margin: -0.6em auto 0.2em auto"
+            >
+                {description}
+            </div>
+
+            <div class="vice" style="text-align: center">
+                {
+                    updated && updated !== added ? (
+                        <span>
+                            <time>{added}</time> (<time>{updated}</time>)
+                        </span>
+                    ) : (
+                        <span>{added && <time>{added}</time>}</span>
+                    )
+                }
+            </div>
+
+            <div class="vice" style="text-align: center; margin: 0 auto 0 auto">
+                {
+                    tags.map((tag: string, i: number) => (
+                        <span>
+                            {i > 0 && " / "}
+                            {tag}
+                        </span>
+                    ))
+                }
+            </div>
+
+            <hr />
+
+            <slot />
+
+            <Footer />
+        </main>
+    </body>
+</html>
+
+```
+
+File: ./src/pages/posts.astro
+
+```
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Post from "../components/Post.astro";
+
+import { SITE_TITLE } from "../config";
+
+// Use Astro.glob() to fetch all posts, and then sort them by date.
+const posts = (await Astro.glob("../posts/*.md")).sort(
+    (a, b) =>
+        new Date(b.frontmatter.updated || b.frontmatter.added).valueOf() -
+        new Date(a.frontmatter.updated || a.frontmatter.added).valueOf(),
+);
+---
+
+<!doctype html>
+<html lang="zh-cn">
+    <BaseHead title={SITE_TITLE} />
+
+    <body>
+        <Header />
+
+        <main>
+            <ul>
+                {
+                    posts.map(
+                        ({
+                            url,
+                            frontmatter: { title, tags, added: date },
+                        }) => <Post {date} {title} {tags} />,
+                    )
+                }
+            </ul>
+        </main>
+
+        <Footer />
+    </body>
+</html>
+
+```
+
+File: ./src/pages/404.astro
+
+```
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+import { SITE_TITLE } from "../config";
+---
+
+<!doctype html>
+<html lang="zh-cn">
+    <BaseHead title={SITE_TITLE} />
+
+    <body>
+        <Header title={SITE_TITLE} />
+
+        <main>404: Page not found</main>
+
+        <Footer />
+    </body>
+</html>
+
+```
+
+File: ./src/pages/index.astro
+
+```
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import HomePosts from "../components/HomePosts.astro";
+
+import { SITE_TITLE } from "../config";
+
+const posts = await Astro.glob("../posts/*.md");
+---
+
+<!doctype html>
+<html lang="zh-cn">
+    <BaseHead title={SITE_TITLE} />
+
+    <body>
+        <Header title={SITE_TITLE} />
+
+        <main>
+            <HomePosts allPosts={posts} />
+        </main>
+
+        <Footer />
+    </body>
+</html>
+
+```
+
+File: ./src/pages/post/[title].astro
+
+```
+---
+import BlogPost from "../../layouts/BlogPost.astro";
+
+// Credit to @rachsmithcodes for this function
+export async function getStaticPaths() {
+    let posts = await Astro.glob(`../../posts/*.md`);
+
+    return posts.map((post) => {
+        return {
+            params: { title: post.frontmatter.title },
+            props: { post: post },
+        };
+    });
+}
+
+const { post } = Astro.props;
+const { Content } = post;
+---
+
+<BlogPost content={post.frontmatter}>
+    <Content />
+</BlogPost>
+
+```
+

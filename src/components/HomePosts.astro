@@ -1,0 +1,22 @@
+---
+import Post from "../components/Post.astro";
+
+const { allPosts } = Astro.props;
+
+let posts = allPosts.sort(
+    (a, b) =>
+        new Date(b.frontmatter.added).valueOf() -
+        new Date(a.frontmatter.added).valueOf(),
+);
+---
+
+<ul style={{ paddingLeft: "0" }}>
+    {
+        posts.map(
+            ({
+                url,
+                frontmatter: { added: date, description, tags, title },
+            }) => <Post {date} {description} {tags} {title} />,
+        )
+    }
+</ul>

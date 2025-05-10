@@ -1,0 +1,37 @@
+---
+const today = new Date();
+---
+
+<footer>
+    <hr />
+
+    &copy; {today.getFullYear()} Liozur
+
+    <br />
+
+    所有内容采用 <a
+        href="https://creativecommons.org/licenses/by-nc/4.0/deed.zh"
+    >
+        CC BY-NC 4.0</a
+    > 许可协议
+
+    <br />
+
+    <a href="https://liozur.github.io" style="margin-right: 0.5em">Home</a>
+    <a href="mailto:liozur.owa@icloud.com" style="margin-right: 0.5em">Email</a>
+    <a href="https://github.com/liozur" style="margin-right: 0.5em"
+        >GitHub</a
+    >
+    <a href="RSS">RSS</a>
+</footer>
+
+<style>
+    footer {
+        font-size: 0.8em; /* TODO: 引入太多的字体大小好吗? */
+        font-family: ZhSerif, IBMPlexSerif;
+        text-align: center;
+        line-height: calc(var(--font-size) * 1);
+
+        padding: 2em 0 2em 0;
+    }
+</style>

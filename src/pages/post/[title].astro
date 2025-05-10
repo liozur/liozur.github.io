@@ -1,0 +1,22 @@
+---
+import BlogPost from "../../layouts/BlogPost.astro";
+
+// Credit to @rachsmithcodes for this function
+export async function getStaticPaths() {
+    let posts = await Astro.glob(`../../posts/*.md`);
+
+    return posts.map((post) => {
+        return {
+            params: { title: post.frontmatter.title },
+            props: { post: post },
+        };
+    });
+}
+
+const { post } = Astro.props;
+const { Content } = post;
+---
+
+<BlogPost content={post.frontmatter}>
+    <Content />
+</BlogPost>

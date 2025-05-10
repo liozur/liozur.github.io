@@ -1,0 +1,25 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import HomePosts from "../components/HomePosts.astro";
+
+import { SITE_TITLE } from "../config";
+
+const posts = await Astro.glob("../posts/*.md");
+---
+
+<!doctype html>
+<html lang="zh-cn">
+    <BaseHead title={SITE_TITLE} />
+
+    <body>
+        <Header title={SITE_TITLE} />
+
+        <main>
+            <HomePosts allPosts={posts} />
+        </main>
+
+        <Footer />
+    </body>
+</html>

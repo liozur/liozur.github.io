@@ -1,0 +1,20 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+import { SITE_TITLE } from "../config";
+---
+
+<!doctype html>
+<html lang="zh-cn">
+    <BaseHead title={SITE_TITLE} />
+
+    <body>
+        <Header title={SITE_TITLE} />
+
+        <main>404: Page not found</main>
+
+        <Footer />
+    </body>
+</html>

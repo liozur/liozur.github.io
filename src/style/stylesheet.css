@@ -1,0 +1,259 @@
+@import "./fonts.css";
+
+/***************************************
+自定义样式
+***************************************/
+
+:root {
+    --font-size: 1.56em; /*该数值基于 CTeX 宏包*/
+}
+
+body {
+    font-size: 1em;
+    font-family: ZhSerif, IBMPlexSerif;
+    text-align: justify;
+    line-height: calc(var(--font-size) * 1);
+
+    width: 90%;
+    margin: 0 auto 0 auto;
+    max-width: 40em;
+}
+
+a {
+    color: #3366CC;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #3366CC;
+}
+
+.vice {
+    font-size: 0.9em;
+    font-family: ZhSerif, IBMPlexSerif;
+    font-style: italic;
+    text-align: justify;
+    text-indent: 0;
+    line-height: calc(var(--font-size) * 1);
+}
+
+/*******************
+标题
+*******************/
+
+h1, h3, h4, h5 {
+    font-weight: normal;
+}
+
+h1 {
+    font-size: 1.6em;
+    font-family: ZhTitleSerif, IBMPlexTitleSerif;
+    text-align: center;
+    line-height: calc(var(--font-size) * 1);
+
+    width: 75%;
+    margin: 0.8em auto 0.8em auto;
+}
+
+h2 {
+    font-size: 1.45em;
+    font-family: ZhTitleSerif, IBMPlexTitleSerif;
+    text-align: center;
+    line-height: calc(var(--font-size) * 1);
+
+    width: 75%;
+    margin: 0.775em auto 0.775em auto;
+}
+
+h3 {
+    font-size: 1.3em;
+    font-family: ZhSerif, IBMPlexSerif;
+    text-align: center;
+    line-height: calc(var(--font-size) * 1);
+
+    width: 75%;
+    margin: 0.65em auto 0.65em auto;
+}
+
+h4 {
+    font-size: 1.15em;
+    font-family: ZhSerif, IBMPlexSerif;
+    text-align: center;
+    line-height: calc(var(--font-size) * 1);
+
+    width: 75%;
+    margin: 0.575em auto 0.575em auto;
+}
+
+h5 {
+    font-size: 1.05em;
+    font-family: ZhSerif, IBMPlexSerif;
+    text-align: center;
+    line-height: calc(var(--font-size) * 1);
+
+    width: 75%;
+    margin: 0.525em auto 0.525em auto;
+}
+
+h6 {
+    font-size: 1em;
+    font-family: ZhSerif, IBMPlexSerif;
+    text-align: center;
+
+    width: 75%;
+    margin: 0.5em auto 0.5em auto;
+}
+
+/*******************
+段落
+*******************/
+
+p {
+    font-size: 1em;
+    font-family: ZhSerif, IBMPlexSerif;
+    text-align: justify;
+    text-indent: 2em;
+
+    /* padding: 0.5em; */
+    margin: 0;
+
+    letter-spacing: 0.04em;
+}
+
+/*******************
+列表
+*******************/
+
+ul, ol {
+    margin: 0;
+    padding: 0 0 0 2em;
+
+    list-style-position: inside;
+}
+
+li {
+    /* TODO: 没有完全对齐 */
+    text-indent: -1em;
+    margin: 0 0 0 1em;
+}
+
+/*******************
+注释
+*******************/
+
+a.comment_forward_link {
+    font-size: 0.6em;
+    font-family: ZhSerif, IBMPlexSerif;
+
+    margin: 0;
+    padding: 0;
+
+    vertical-align: text-bottom;
+}
+
+table.comment {
+    font-size: 0.9em;
+    font-family: ZhSerif, IBMPlexSerif;
+
+    margin: 0;
+    border: 0;
+}
+
+th.comment, td.comment {
+    text-align: justify;
+    vertical-align: top;
+
+    padding: 0 4px 0 4px;
+    border: 0;
+}
+
+/*******************
+引用
+*******************/
+
+blockquote {
+    font-family: ZhSerif, IBMPlexSerif;
+    font-style: italic;
+
+    margin: 0.5em 0 0.5em 0;
+    padding: 0 2em 0 calc(2em + 7px); /* 图像, 代码和表格的内边距都是 8px */
+
+    position: relative;
+}
+
+blockquote::before {
+    content: "";
+    left: 2em;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: black;
+
+    position: absolute;
+}
+
+/*******************
+图像
+*******************/
+
+body img {
+    width: 60%;
+    height: auto;
+    margin: 0.5em auto 0 auto;
+    border: 1px solid black;
+
+    display: block;
+}
+
+p.img_title {
+    font-size: 0.9em;
+    font-family: ZhSerif, IBMPlexSerif;
+    text-align: center;
+    text-indent: 0;
+    line-height: calc(var(--font-size) * 1);
+
+    width: 60%;
+    height: auto;
+    margin: 0 auto 0.5em auto;
+}
+
+/*******************
+表格
+*******************/
+
+table {
+    margin: 0 2em 0.5em 2em;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+
+    padding: 8px;
+    border: 1px solid black;
+}
+
+p.tbl_title {
+    font-size: 0.9em;
+    font-family: ZhSerif, IBMPlexSerif;
+    text-align: center;
+    text-indent: 0;
+    line-height: calc(var(--font-size) * 1);
+
+    margin: 0.5em 2em 0 2em;
+}
+
+/*******************
+代码
+*******************/
+
+pre {
+    font-family: IBMPlexMono;
+
+    margin: 0.5em 2em 0.5em 2em;
+    padding: 8px;
+    border: 1px solid black;
+
+    line-height: calc(var(--font-size) * 0.8);
+}

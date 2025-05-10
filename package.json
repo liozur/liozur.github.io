@@ -1,0 +1,28 @@
+{
+    "name": "@cassidoo/blahg",
+    "version": "0.0.1",
+    "private": true,
+    "scripts": {
+        "dev": "astro dev",
+        "start": "astro dev",
+        "build": "astro build",
+        "preview": "astro preview",
+        "astro": "astro"
+    },
+    "devDependencies": {
+        "@astrojs/rss": "^4.0.11",
+        "@astrojs/sitemap": "^3.3.1",
+        "astro": "^5.7.12",
+        "prettier": "^3.3.3",
+        "prettier-plugin-astro": "^0.14.1"
+    },
+    "dependencies": {
+        "rehype-autolink-headings": "^7.1.0",
+        "remark-html": "^16.0.1",
+        "remark-squeeze-paragraphs": "^6.0.0",
+        "remark-toc": "^9.0.0",
+        "remark-wiki-link": "^2.0.1",
+        "unified": "^11.0.5",
+        "unist-util-visit": "^5.0.0"
+    }
+}

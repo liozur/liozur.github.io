@@ -1,0 +1,287 @@
+/***************************************
+中文字体
+***************************************/
+
+/*******************
+ZhSerif
+*******************/
+
+@font-face {
+    font-family: "ZhSerif";
+    src: url(fonts/FZShusong.TTF) format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+    font-family: "ZhSerif";
+    src: url(fonts/FZFangsong.TTF) format("truetype");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+    font-family: "ZhSerif";
+    src: url(fonts/FZHeiti.TTF) format("truetype");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+    font-family: "ZhSerif";
+    src: url(fonts/FZHeiti.TTF) format("truetype");
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+/*******************
+ZhTitleSerif
+*******************/
+
+@font-face {
+    font-family: "ZhTitleSerif";
+    src: url(fonts/FZXiaobiaosong.TTF) format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+    font-family: "ZhTitleSerif";
+    src: url(fonts/FZXiaobiaosong.TTF) format("truetype");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+    font-family: "ZhTitleSerif";
+    src: url(fonts/FZXihei.TTF) format("truetype");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+    font-family: "ZhTitleSerif";
+    src: url(fonts/FZXihei.TTF) format("truetype");
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+/*******************
+ZhSans
+*******************/
+
+@font-face {
+    font-family: "ZhSans";
+    src: url(fonts/FZKaiti.TTF) format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+    font-family: "ZhSans";
+    src: url(fonts/FZFangsong.TTF) format("truetype");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+    font-family: "ZhSans";
+    src: url(fonts/FZHeiti.TTF) format("truetype");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+@font-face {
+    font-family: "ZhSans";
+    src: url(fonts/FZHeiti.TTF) format("truetype");
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+2E80-9FFF, U+3000-303F, U+FF00-FFEF;
+}
+
+/***************************************
+英文字体
+***************************************/
+
+/*******************
+IBMPlexSerif
+*******************/
+
+@font-face {
+    font-family: "IBMPlexSerif";
+    src: url(fonts/IBMPlexSerif.ttf) format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexSerif";
+    src: url(fonts/IBMPlexSerifItalic.ttf) format("truetype");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexSerif";
+    src: url(fonts/IBMPlexSerifBold.ttf) format("truetype");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexSerif";
+    src: url(fonts/IBMPlexSerifBoldItalic.ttf) format("truetype");
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+/*******************
+IBMPlexTitleSerif
+*******************/
+
+@font-face {
+    font-family: "IBMPlexTitleSerif";
+    src: url(fonts/IBMPlexSerifLight.ttf) format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexTitleSerif";
+    src: url(fonts/IBMPlexSerifLightItalic.ttf) format("truetype");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexTitleSerif";
+    src: url(fonts/IBMPlexSerif.ttf) format("truetype");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexTitleSerif";
+    src: url(fonts/IBMPlexSerifItalic.ttf) format("truetype");
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+/*******************
+IBMPlexSans
+*******************/
+
+@font-face {
+    font-family: "IBMPlexSans";
+    src: url(fonts/IBMPlexSans.ttf) format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexSans";
+    src: url(fonts/IBMPlexSansItalic.ttf) format("truetype");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexSans";
+    src: url(fonts/IBMPlexSansBold.ttf) format("truetype");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexSans";
+    src: url(fonts/IBMPlexSansBoldItalic.ttf) format("truetype");
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+/*******************
+IBMPlexMono
+*******************/
+
+@font-face {
+    font-family: "IBMPlexMono";
+    src: url(fonts/IBMPlexMono.ttf) format("truetype");
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexMono";
+    src: url(fonts/IBMPlexMonoItalic.ttf) format("truetype");
+    font-weight: normal;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexMono";
+    src: url(fonts/IBMPlexMonoBold.ttf) format("truetype");
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
+
+@font-face {
+    font-family: "IBMPlexMono";
+    src: url(fonts/IBMPlexMonoBoldItalic.ttf) format("truetype");
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+    unicode-range: U+0000-2E7F, U+3040-FEFF, U+FFF0-FFFF;
+}
